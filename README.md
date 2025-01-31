@@ -12,13 +12,19 @@ This is an [Expo](https://expo.dev) project created with [`bun create expo <app>
    curl -fsSL https://bun.sh/install | bash # for macOS, Linux, and WSL
    ```
 
-2. Install dependencies
+2. Git clone the project
+
+   ```bash
+   git clone https://github.com/wit-mrktplc/app.git
+   ```
+
+3. Install dependencies
 
    ```bash
    bun install
    ```
 
-3. Start the app
+4. Start the app
 
    ```bash
     bun expo start
