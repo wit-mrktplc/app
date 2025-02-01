@@ -11,12 +11,18 @@ import {
   useAuthRequest,
   useAutoDiscovery,
 } from "expo-auth-session";
+import { useAppDispatch, useAppSelector } from "@/hooks/useApp";
+import { authenticate, AuthState } from "@/store/auth-slice";
+import { useEffect } from "react";
 
 WebBrowser.maybeCompleteAuthSession();
 
 const clientId = process.env.EXPO_PUBLIC_AZURE_CLIENT_ID as string;
 
 export default function AuthScreen() {
+  const authed = useAppSelector((state) => state.auth.authed);
+  const dispatch = useAppDispatch();
+
   const discovery = useAutoDiscovery(
     `https://login.microsoftonline.com/common`
   );
@@ -35,11 +41,17 @@ export default function AuthScreen() {
     discovery
   );
 
+  useEffect(() => {
+    if (authed) {
+      console.log("[AUTH] Misploced user is authed, redirecting to /v1");
+      router.replace("/v1");
+    }
+  }, [authed]);
+
   return (
     <ThemedView style={styles.background}>
       <SafeAreaView style={styles.page}>
-        <ThemedText type="title">Authenticate Please</ThemedText>
-        <ThemedText>This is the authentication screen.</ThemedText>
+        <ThemedText type="title">Authenticate</ThemedText>
         <Pressable
           disabled={!request}
           onPress={() => {
@@ -58,7 +70,15 @@ export default function AuthScreen() {
                   },
                   discovery
                 ).then((res) => {
-                  console.log("[AUTH] Token response", res);
+                  console.log("[AUTH] Token exchange successful");
+                  dispatch(
+                    authenticate({
+                      accessToken: res.accessToken,
+                      idToken: res.idToken,
+                      refreshToken: res.refreshToken,
+                    } as Omit<AuthState, "token">)
+                  );
+                  console.log("[AUTH] Redirecting to /v1");
                   router.replace("/v1");
                 });
               }

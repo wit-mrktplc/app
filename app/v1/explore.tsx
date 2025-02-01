@@ -3,9 +3,12 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { router } from "expo-router";
+import { useAppDispatch } from "@/hooks/useApp";
+import { deauthenticate } from "@/store/auth-slice";
 
 export default function TabTwoScreen() {
+  const dispatch = useAppDispatch();
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
@@ -19,13 +22,13 @@ export default function TabTwoScreen() {
       }
     >
       <ThemedView style={styles.page}>
-        <ThemedText type="title">Explore something else?</ThemedText>
+        <ThemedText type="title">Second page</ThemedText>
         <Pressable
           onPress={() => {
-            router.replace("../../");
+            dispatch(deauthenticate());
           }}
         >
-          <ThemedText type="link">Go back home</ThemedText>
+          <ThemedText type="link">Deauthenticate</ThemedText>
         </Pressable>
       </ThemedView>
     </ParallaxScrollView>

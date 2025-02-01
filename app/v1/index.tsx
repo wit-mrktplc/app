@@ -16,7 +16,8 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.page}>
-        <ThemedText type="title">You are authed!</ThemedText>
+        <ThemedText type="title">Home page</ThemedText>
+        <ThemedText type="default">Go to explore to log out</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
