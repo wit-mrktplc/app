@@ -76,7 +76,7 @@ export default function AuthScreen() {
                       accessToken: res.accessToken,
                       idToken: res.idToken,
                       refreshToken: res.refreshToken,
-                    } as Omit<AuthState, "token">)
+                    } as Omit<AuthState, "user">)
                   );
                   console.log("[AUTH] Redirecting to /v1");
                   router.replace("/v1");
