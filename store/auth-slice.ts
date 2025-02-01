@@ -54,6 +54,10 @@ export const authSlice = createSlice({
       state.accessToken = undefined;
       state.idToken = undefined;
       state.refreshToken = undefined;
+
+      state.user.ipaddr = undefined;
+      state.user.email = undefined;
+      state.user.username = undefined;
     },
   },
 });
