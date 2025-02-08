@@ -44,7 +44,7 @@ export default function AuthScreen() {
   useEffect(() => {
     if (authed) {
       console.log("[AUTH] Misploced user is authed, redirecting to /v1");
-      router.replace("/v1");
+      router.replace("/v1/buy");
     }
   }, [authed]);
 
@@ -79,7 +79,7 @@ export default function AuthScreen() {
                     } as Omit<AuthState, "user">)
                   );
                   console.log("[AUTH] Redirecting to /v1");
-                  router.replace("/v1");
+                  router.replace("/v1/buy");
                 });
               }
             });
