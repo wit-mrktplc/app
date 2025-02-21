@@ -43,6 +43,8 @@ export const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
 
       const decoded = jwtDecode<JWTPayload>(action.payload.idToken as string);
+
+      console.log("[AUTH] Decoded JWT", decoded);
       state.user = {
         ipaddr: decoded.ipaddr,
         email: decoded.unique_name,
