@@ -1,8 +1,6 @@
-import { Pressable } from "react-native";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { Pressable, SafeAreaView } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { IconSymbol } from "@/components/ui/IconSymbol";
 import { prepend, removeById } from "@/store/notification/notification-slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/useApp";
 import tw from "twrnc";
@@ -27,18 +25,8 @@ export default function InboxScreen() {
   }
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#D0D0D0", dark: "#353636" }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={tw`absolute bottom-[-90px] left-[-35px] text-gray-500`}
-        />
-      }
-    >
-      <ThemedView style={tw`flex-1 gap-2`}>
+    <ThemedView style={tw`flex-1 p-4`}>
+      <SafeAreaView style={tw`flex-1 gap-2`}>
         <ThemedText type="title">Inbox</ThemedText>
         <Pressable onPress={addNotification}>
           <ThemedText type="link">Add Notification</ThemedText>
@@ -56,7 +44,7 @@ export default function InboxScreen() {
             <ThemedText type="default">{notification.message}</ThemedText>
           </Pressable>
         ))}
-      </ThemedView>
-    </ParallaxScrollView>
+      </SafeAreaView>
+    </ThemedView>
   );
 }

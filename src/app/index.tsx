@@ -31,7 +31,7 @@ export default function AuthScreen() {
 
   const redirectUri = makeRedirectUri({
     scheme: "com.adomaitisc.expoapp",
-    path: "192.168.1.123:8081/v1",
+    path: "192.168.1.123:8081/(tabs)",
   });
 
   const [request, , promptAsync] = useAuthRequest(
@@ -45,8 +45,10 @@ export default function AuthScreen() {
 
   useEffect(() => {
     if (authed) {
-      console.log("[AUTH] Misploced user is authed, redirecting to /v1");
-      router.replace("/v1/buy");
+      console.log(
+        "[AUTH] Misploced user is authed, redirecting to /(tabs)/buy"
+      );
+      router.replace("/(tabs)/buy");
     }
   }, [authed]);
 
@@ -64,36 +66,48 @@ export default function AuthScreen() {
           style={tw`bg-white rounded-full px-4.5 py-2.5`}
           disabled={!request}
           onPress={() => {
-            console.log("[AUTH] Prompting user to authenticate");
-            promptAsync().then((codeResponse) => {
-              console.log("[AUTH] Code response", codeResponse);
-              if (request && codeResponse?.type === "success" && discovery) {
-                console.log("[AUTH] Exchanging code for token");
-                exchangeCodeAsync(
-                  {
-                    clientId,
-                    code: codeResponse.params.code,
-                    extraParams: request.codeVerifier
-                      ? { code_verifier: request.codeVerifier }
-                      : undefined,
-                    redirectUri,
-                  },
-                  discovery
-                ).then((res) => {
-                  console.log("[AUTH] Token exchange successful");
-                  console.log("[AUTH] Response", res);
-                  dispatch(
-                    authenticate({
-                      accessToken: res.accessToken,
-                      idToken: res.idToken,
-                      refreshToken: res.refreshToken,
-                    } as Omit<AuthState, "user">)
-                  );
-                  console.log("[AUTH] Redirecting to /v1");
-                  router.replace("/v1/buy");
-                });
-              }
-            });
+            dispatch(
+              authenticate({
+                accessToken:
+                  "eyJhbGciOiJIUzI1NiJ9.e30.vUjB4DqhuHE6PAl-KJnqXwpD2cRmdrJQqUYEuMcqT4U",
+                idToken:
+                  "eyJhbGciOiJIUzI1NiJ9.e30.vUjB4DqhuHE6PAl-KJnqXwpD2cRmdrJQqUYEuMcqT4U",
+                refreshToken:
+                  "eyJhbGciOiJIUzI1NiJ9.e30.vUjB4DqhuHE6PAl-KJnqXwpD2cRmdrJQqUYEuMcqT4U",
+              } as Omit<AuthState, "user">)
+            );
+            console.log("[AUTH] Redirecting to /(tabs)/buy");
+            // router.replace("/(tabs)/buy");
+            // console.log("[AUTH] Prompting user to authenticate");
+            // promptAsync().then((codeResponse) => {
+            //   console.log("[AUTH] Code response", codeResponse);
+            //   if (request && codeResponse?.type === "success" && discovery) {
+            //     console.log("[AUTH] Exchanging code for token");
+            //     exchangeCodeAsync(
+            //       {
+            //         clientId,
+            //         code: codeResponse.params.code,
+            //         extraParams: request.codeVerifier
+            //           ? { code_verifier: request.codeVerifier }
+            //           : undefined,
+            //         redirectUri,
+            //       },
+            //       discovery
+            //     ).then((res) => {
+            //       console.log("[AUTH] Token exchange successful");
+            //       console.log("[AUTH] Response", res);
+            //       dispatch(
+            //         authenticate({
+            //           accessToken: res.accessToken,
+            //           idToken: res.idToken,
+            //           refreshToken: res.refreshToken,
+            //         } as Omit<AuthState, "user">)
+            //       );
+            //       console.log("[AUTH] Redirecting to /(tabs)/buy");
+            //       router.replace("/(tabs)/buy");
+            //     });
+            //   }
+            // });
           }}
         >
           <ThemedText style={tw`text-black font-bold text-lg`}>
