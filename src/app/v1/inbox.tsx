@@ -1,11 +1,10 @@
-import { StyleSheet, Pressable } from "react-native";
+import { Pressable } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { prepend, removeById } from "@/store/notification/notification-slice";
 import { useAppDispatch, useAppSelector } from "@/hooks/useApp";
-import { useEffect } from "react";
 import tw from "twrnc";
 
 const names = ["Diego", "Matt", "Nico", "Cauã"];
@@ -15,7 +14,6 @@ export default function InboxScreen() {
   const dispatch = useAppDispatch();
 
   function addNotification() {
-    // Add a notification to the store
     dispatch(
       prepend({
         id: Math.random().toString(36).substring(7),
@@ -36,11 +34,11 @@ export default function InboxScreen() {
           size={310}
           color="#808080"
           name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
+          style={tw`absolute bottom-[-90px] left-[-35px] text-gray-500`}
         />
       }
     >
-      <ThemedView style={styles.page}>
+      <ThemedView style={tw`flex-1 gap-2`}>
         <ThemedText type="title">Inbox</ThemedText>
         <Pressable onPress={addNotification}>
           <ThemedText type="link">Add Notification</ThemedText>
@@ -62,16 +60,3 @@ export default function InboxScreen() {
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
-  },
-  page: {
-    flex: 1,
-    gap: 8,
-  },
-});

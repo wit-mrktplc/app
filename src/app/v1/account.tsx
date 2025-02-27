@@ -1,10 +1,11 @@
-import { StyleSheet, Pressable } from "react-native";
+import { Pressable } from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { deauthenticate } from "@/store/auth/auth-slice";
 import { useAppDispatch } from "@/hooks/useApp";
+import tw from "twrnc";
 
 export default function AccountScreen() {
   const dispatch = useAppDispatch();
@@ -17,11 +18,11 @@ export default function AccountScreen() {
           size={310}
           color="#808080"
           name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
+          style={tw`absolute bottom-[-90px] left-[-35px] text-gray-500`}
         />
       }
     >
-      <ThemedView style={styles.page}>
+      <ThemedView style={tw`flex-1 gap-2`}>
         <ThemedText type="title">Account</ThemedText>
         <Pressable
           onPress={() => {
@@ -34,16 +35,3 @@ export default function AccountScreen() {
     </ParallaxScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  headerImage: {
-    color: "#808080",
-    bottom: -90,
-    left: -35,
-    position: "absolute",
-  },
-  page: {
-    flex: 1,
-    gap: 8,
-  },
-});
