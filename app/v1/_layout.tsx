@@ -74,20 +74,38 @@ export default function TabLayout() {
       <Tabs.Screen
         name="inbox"
         options={{
-          tabBarIcon: ({ focused }) =>
-            notificationCount > 0 ? (
-              <ThemedText
-                style={tw`${
-                  focused ? "text-white" : "text-[#8F8F8F]"
-                }  text-xl `}
-              >
-                {notificationCount}
-              </ThemedText>
-            ) : (
+          tabBarIcon: ({ focused }) => (
+            <View style={tw`relative`}>
+              {notificationCount > 0 ? (
+                notificationCount < 10 ? (
+                  <View
+                    style={tw`absolute z-10 -top-1 -right-2 bg-[#26B555] size-4 rounded-full flex items-center justify-center`}
+                  >
+                    <ThemedText
+                      type="default"
+                      style={tw`text-[#1F2123] text-xs font-semibold`}
+                    >
+                      {notificationCount}
+                    </ThemedText>
+                  </View>
+                ) : (
+                  <View
+                    style={tw`absolute z-10 -top-1 -right-2 bg-[#26B555] h-4 px-0.5 rounded-full flex items-center justify-center`}
+                  >
+                    <ThemedText
+                      type="default"
+                      style={tw`text-[#1F2123] text-xs font-semibold`}
+                    >
+                      {notificationCount}
+                    </ThemedText>
+                  </View>
+                )
+              ) : null}
               <InboxIcon
                 style={tw`${focused ? "text-white" : "text-[#8F8F8F]"}`}
               />
-            ),
+            </View>
+          ),
         }}
       />
       <Tabs.Screen
