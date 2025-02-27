@@ -43,11 +43,7 @@ export default function TabLayout() {
         ),
         tabBarShowLabel: false,
         tabBarStyle: {
-          position: "absolute",
-          paddingTop: 8,
-          height: 88,
-          backgroundColor: "transparent",
-          marginBottom: 0,
+          ...tw`absolute pt-2 h-22 bg-transparent mb-0`,
         },
       }}
     >
