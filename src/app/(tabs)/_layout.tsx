@@ -1,7 +1,5 @@
 import { Tabs, router } from "expo-router";
 import React, { useEffect } from "react";
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme";
 import { useAppSelector } from "@/hooks/useApp";
 
 import tw from "twrnc";
@@ -12,7 +10,7 @@ import {
   UserRoundIcon,
 } from "lucide-react-native";
 import { HapticTab } from "@/components/HapticTab";
-import { Platform, View } from "react-native";
+import { useColorScheme, View } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { BlurView } from "expo-blur";
 
