@@ -4,7 +4,6 @@ import tw from "twrnc";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { FlashList } from "@shopify/flash-list";
-import { useState } from "react";
 
 interface FlashItem {
   id: number;
