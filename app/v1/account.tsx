@@ -3,7 +3,7 @@ import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { deauthenticate } from "@/store/auth-slice";
+import { deauthenticate } from "@/store/auth/auth-slice";
 import { useAppDispatch } from "@/hooks/useApp";
 
 export default function AccountScreen() {

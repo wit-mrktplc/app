@@ -13,7 +13,7 @@ import {
   refreshAsync,
 } from "expo-auth-session";
 import { useAppDispatch, useAppSelector } from "@/hooks/useApp";
-import { authenticate, AuthState } from "@/store/auth-slice";
+import { authenticate, AuthState } from "@/store/auth/auth-slice";
 import { useEffect } from "react";
 
 WebBrowser.maybeCompleteAuthSession();
