@@ -1,5 +1,4 @@
-import { Text, type TextProps, StyleSheet } from "react-native";
-
+import { Text, type TextProps } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import tw from "twrnc";
 
@@ -14,7 +13,7 @@ const themedTextTypes = {
   title: tw`text-2xl font-bold leading-8`,
   defaultSemiBold: tw`text-base font-semibold leading-6`,
   subtitle: tw`text-lg font-bold`,
-  link: tw`text-blue-500`,
+  link: tw`text-base text-blue-500`,
 };
 
 export function ThemedText({
@@ -28,29 +27,3 @@ export function ThemedText({
 
   return <Text style={[{ color }, themedTextTypes[type], style]} {...rest} />;
 }
-
-const styles = StyleSheet.create({
-  default: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  defaultSemiBold: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: "600",
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  link: {
-    lineHeight: 30,
-    fontSize: 16,
-    color: "#0a7ea4",
-  },
-});
