@@ -1,5 +1,7 @@
 # Welcome to the App
 
+## `main` is protected, to propose a change, create a branch and assign someone at the pull request
+
 This is an [Expo](https://expo.dev) project created with [`bun create expo <app>`](https://docs.expo.dev/guides/using-bun/).
 
 ## Get started
