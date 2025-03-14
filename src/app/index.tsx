@@ -1,47 +1,20 @@
-import { TouchableOpacity, StyleSheet, Text, View, Alert } from "react-native";
+import { TouchableOpacity, View, Alert, Platform } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 
 import * as WebBrowser from "expo-web-browser";
-import {
-  exchangeCodeAsync,
-  makeRedirectUri,
-  useAuthRequest,
-  useAutoDiscovery,
-} from "expo-auth-session";
-import { useAppDispatch, useAppSelector } from "@/hooks/useApp";
-import { authenticate, AuthState } from "@/store/auth/auth-slice";
+import { useAppSelector } from "@/hooks/useApp";
 import { useEffect } from "react";
 
 import tw from "twrnc";
+import { supabase } from "@/lib/supabase";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const clientId = process.env.EXPO_PUBLIC_AZURE_CLIENT_ID as string;
-
 export default function AuthScreen() {
   const authed = useAppSelector((state) => state.auth.authed);
-  const dispatch = useAppDispatch();
-
-  const discovery = useAutoDiscovery(
-    `https://login.microsoftonline.com/common`
-  );
-
-  const redirectUri = makeRedirectUri({
-    scheme: "com.adomaitisc.expoapp",
-    path: "192.168.1.123:8081/(tabs)",
-  });
-
-  const [request, , promptAsync] = useAuthRequest(
-    {
-      clientId,
-      scopes: ["openid", "profile", "email", "offline_access"],
-      redirectUri,
-    },
-    discovery
-  );
 
   useEffect(() => {
     if (authed) {
@@ -64,74 +37,47 @@ export default function AuthScreen() {
 
         <TouchableOpacity
           style={tw`bg-white rounded-full px-4.5 py-2.5`}
-          disabled={!request}
-          onPress={() => {
-            dispatch(
-              authenticate({
-                accessToken:
-                  "eyJhbGciOiJIUzI1NiJ9.e30.vUjB4DqhuHE6PAl-KJnqXwpD2cRmdrJQqUYEuMcqT4U",
-                idToken:
-                  "eyJhbGciOiJIUzI1NiJ9.e30.vUjB4DqhuHE6PAl-KJnqXwpD2cRmdrJQqUYEuMcqT4U",
-                refreshToken:
-                  "eyJhbGciOiJIUzI1NiJ9.e30.vUjB4DqhuHE6PAl-KJnqXwpD2cRmdrJQqUYEuMcqT4U",
-              } as Omit<AuthState, "user">)
-            );
-            console.log("[AUTH] Redirecting to /(tabs)/buy");
-            // router.replace("/(tabs)/buy");
-            // console.log("[AUTH] Prompting user to authenticate");
-            // promptAsync().then((codeResponse) => {
-            //   console.log("[AUTH] Code response", codeResponse);
-            //   if (request && codeResponse?.type === "success" && discovery) {
-            //     console.log("[AUTH] Exchanging code for token");
-            //     exchangeCodeAsync(
-            //       {
-            //         clientId,
-            //         code: codeResponse.params.code,
-            //         extraParams: request.codeVerifier
-            //           ? { code_verifier: request.codeVerifier }
-            //           : undefined,
-            //         redirectUri,
-            //       },
-            //       discovery
-            //     ).then((res) => {
-            //       console.log("[AUTH] Token exchange successful");
-            //       console.log("[AUTH] Response", res);
-            //       dispatch(
-            //         authenticate({
-            //           accessToken: res.accessToken,
-            //           idToken: res.idToken,
-            //           refreshToken: res.refreshToken,
-            //         } as Omit<AuthState, "user">)
-            //       );
-            //       console.log("[AUTH] Redirecting to /(tabs)/buy");
-            //       router.replace("/(tabs)/buy");
-            //     });
-            //   }
-            // });
-          }}
+          onPress={handleLogin}
         >
           <ThemedText style={tw`text-black font-bold text-lg`}>
-            Log in with Wentworth email
+            Log in with Wentworth
           </ThemedText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={tw`px-4 py-2.5`}
-          disabled={!request}
-          onPress={() => {
-            Alert.prompt("Enter your college name", "", (college) => {
-              if (college) {
-                Alert.alert(
-                  "Request sent",
-                  "If there's a host in your college, they'll be in touch soon."
-                );
-                console.log("[AUTH] Requesting college", college);
-              }
-            });
-          }}
-        >
-          <Text style={tw`text-white opacity-60`}>Request your college</Text>
         </TouchableOpacity>
       </SafeAreaView>
     </ThemedView>
   );
+}
+
+function handleLogin() {
+  // For iOS using Alert.prompt
+  if (Platform.OS === "ios") {
+    Alert.prompt(
+      "Login",
+      "Enter your email address",
+      async (email) => {
+        if (email.endsWith("@wit.edu")) {
+          const { error } = await supabase.auth.signInWithOtp({
+            email: email,
+            options: {
+              // set this to false if you do not want the user to be automatically signed up
+              shouldCreateUser: true,
+              emailRedirectTo: "https://example.com/welcome",
+            },
+          });
+          if (error) {
+            Alert.alert("Error", error.message);
+          } else {
+            Alert.alert("Success", "Check your email for the magic link!");
+          }
+        }
+      },
+      "plain-text"
+    );
+  } else {
+    // For Android, you could use a custom modal input
+    Alert.alert(
+      "Unavailable",
+      "Magic link prompt is not available on Android. Please implement a custom modal for email input."
+    );
+  }
 }
