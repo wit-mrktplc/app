@@ -18,13 +18,19 @@ This is an [Expo](https://expo.dev) project created with [`bun create expo <app>
    git clone https://github.com/wit-mrktplc/app.git
    ```
 
-3. Install dependencies
+3. Change the directory
+
+   ```bash
+   cd app
+   ```
+
+4. Install dependencies
 
    ```bash
    bun install
    ```
 
-4. Start the app
+5. Start the app
 
    ```bash
     bun expo start
