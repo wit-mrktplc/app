@@ -3,10 +3,12 @@ import { configureStore } from "@reduxjs/toolkit";
 // import without brackets here, because we are importing the default export, the reducer
 import { authSlice } from "./auth/auth-slice";
 import { notificationSlice } from "./notification/notification-slice";
+import { userSlice } from "./user/user-slice";
 
 const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
+    user: userSlice.reducer,
     notification: notificationSlice.reducer,
   },
 });
