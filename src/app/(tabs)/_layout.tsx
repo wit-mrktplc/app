@@ -4,18 +4,14 @@ import { useAppSelector } from "@/hooks/useApp";
 
 import tw from "twrnc";
 import {
-  InboxIcon,
-  ListIcon,
   ShoppingCartIcon,
-  UserRoundIcon,
+  AlignJustifyIcon,
+  SearchIcon,
 } from "lucide-react-native";
 import { HapticTab } from "@/components/HapticTab";
-import { useColorScheme, View } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
 import { BlurView } from "expo-blur";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const auth = useAppSelector((state) => state.auth);
 
   const notificationCount = useAppSelector((state) => state.notification.count);
@@ -36,12 +32,12 @@ export default function TabLayout() {
           <BlurView
             style={tw`absolute top-0 left-0 right-0 bottom-0`}
             intensity={100}
-            tint={colorScheme === "dark" ? "dark" : "light"}
+            tint="dark"
           />
         ),
         tabBarShowLabel: false,
         tabBarStyle: {
-          ...tw`absolute pt-2 h-22 bg-transparent mb-0`,
+          ...tw`absolute pt-2 h-14 bg-transparent mb-8 mx-26 rounded-full overflow-hidden`,
         },
       }}
     >
@@ -50,7 +46,21 @@ export default function TabLayout() {
         options={{
           tabBarIcon: ({ focused }) => (
             <ShoppingCartIcon
+              style={tw`${focused ? "text-white" : "text-[#8F8F8F]"} `}
+              size={24}
+              fill={focused ? "white" : "transparent"}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="search"
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <SearchIcon
               style={tw`${focused ? "text-white" : "text-[#8F8F8F]"}`}
+              size={24}
+              strokeWidth={focused ? 2.5 : 1.5}
             />
           ),
         }}
@@ -59,8 +69,10 @@ export default function TabLayout() {
         name="sell"
         options={{
           tabBarIcon: ({ focused }) => (
-            <ListIcon
+            <AlignJustifyIcon
               style={tw`${focused ? "text-white" : "text-[#8F8F8F]"}`}
+              size={24}
+              strokeWidth={focused ? 2.5 : 1.5}
             />
           ),
         }}
@@ -68,48 +80,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="inbox"
         options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={tw`relative`}>
-              {notificationCount > 0 ? (
-                notificationCount < 10 ? (
-                  <View
-                    style={tw`absolute z-10 -top-1 -right-2 bg-[#26B555] size-4 rounded-full flex items-center justify-center`}
-                  >
-                    <ThemedText
-                      type="default"
-                      style={tw`text-[#1F2123] text-xs font-semibold`}
-                    >
-                      {notificationCount}
-                    </ThemedText>
-                  </View>
-                ) : (
-                  <View
-                    style={tw`absolute z-10 -top-1 -right-2 bg-[#26B555] h-4 px-0.5 rounded-full flex items-center justify-center`}
-                  >
-                    <ThemedText
-                      type="default"
-                      style={tw`text-[#1F2123] text-xs font-semibold`}
-                    >
-                      {notificationCount}
-                    </ThemedText>
-                  </View>
-                )
-              ) : null}
-              <InboxIcon
-                style={tw`${focused ? "text-white" : "text-[#8F8F8F]"}`}
-              />
-            </View>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="account"
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <UserRoundIcon
-              style={tw`${focused ? "text-white" : "text-[#8F8F8F]"}`}
-            />
-          ),
+          href: null,
         }}
       />
     </Tabs>
