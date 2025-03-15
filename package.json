@@ -18,7 +18,6 @@
     "@react-navigation/native": "^7.0.14",
     "@reduxjs/toolkit": "^2.5.1",
     "@shopify/flash-list": "1.7.1",
-    "@supabase/supabase-js": "^2.49.1",
     "axios": "^1.8.3",
     "expo": "~52.0.28",
     "expo-auth-session": "^6.0.2",
