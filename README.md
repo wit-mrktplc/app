@@ -35,7 +35,8 @@ This is an [Expo](https://expo.dev) project created with [`bun create expo <app>
 5. Start the app
 
    ```bash
-    bun expo start
+   bun ios # for iOS
+   bun android # for Android
    ```
 
 ## Recommended Content
