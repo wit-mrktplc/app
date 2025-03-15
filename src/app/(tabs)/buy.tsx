@@ -4,6 +4,8 @@ import tw from "twrnc";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { FlashList } from "@shopify/flash-list";
+import { useState, useEffect } from "react";
+import supabase from "@/lib/supabase";
 
 interface FlashItem {
   id: number;
@@ -15,7 +17,30 @@ const mockData: FlashItem[] = Array.from({ length: 20 }, (_, i) => ({
   title: `Item ${i + 1}`,
 }));
 
+async function getListing() {
+  const { data, error } = await supabase
+    .from("listings")
+    .select("*")
+    .eq("domain", "wit.edu");
+  if (error) {
+    console.error("Error fetching listings:", error);
+    return [];
+  }
+
+  return data;
+}
+
 export default function BuyScreen() {
+  const [listings, setListings] = useState<FlashItem[]>([]);
+
+  useEffect(() => {
+    getListing().then((data) => {
+      if (data) {
+        setListings(data);
+      }
+    });
+  }, []);
+
   const renderItem = ({ item }: { item: FlashItem }) => (
     <Pressable
       onPress={() => {
@@ -36,7 +61,7 @@ export default function BuyScreen() {
     <ThemedView style={tw`flex-1`}>
       <SafeAreaView style={tw`flex-1`}>
         <FlashList
-          data={mockData}
+          data={listings}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
           estimatedItemSize={220}
