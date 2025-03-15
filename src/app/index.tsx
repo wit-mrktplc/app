@@ -5,16 +5,19 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 
 import * as WebBrowser from "expo-web-browser";
-import { useAppSelector } from "@/hooks/useApp";
+import { useAppDispatch, useAppSelector } from "@/hooks/useApp";
 import { useEffect } from "react";
 
+import axios from "axios";
+
 import tw from "twrnc";
-import { supabase } from "@/lib/supabase";
+import { authenticate } from "@/store/auth/auth-slice";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function AuthScreen() {
   const authed = useAppSelector((state) => state.auth.authed);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (authed) {
@@ -37,7 +40,21 @@ export default function AuthScreen() {
 
         <TouchableOpacity
           style={tw`bg-white rounded-full px-4.5 py-2.5`}
-          onPress={handleLogin}
+          onPress={() => {
+            console.log("[AUTH] Logging in with Wentworth");
+            axios
+              .post("https://mrktplc.alonsofroeling.com/auth/enter", {
+                email: "webbj@wit.edu",
+              })
+              .then((res) => {
+                Alert.alert("Success", "You have been authenticated!");
+                dispatch(authenticate({ authed: true, token: res.data.token }));
+              })
+              .catch((err) => {
+                console.log(err);
+                Alert.alert("Error", "An error occurred while authenticating.");
+              });
+          }}
         >
           <ThemedText style={tw`text-black font-bold text-lg`}>
             Log in with Wentworth
@@ -46,38 +63,4 @@ export default function AuthScreen() {
       </SafeAreaView>
     </ThemedView>
   );
-}
-
-function handleLogin() {
-  // For iOS using Alert.prompt
-  if (Platform.OS === "ios") {
-    Alert.prompt(
-      "Login",
-      "Enter your email address",
-      async (email) => {
-        if (email.endsWith("@wit.edu")) {
-          const { error } = await supabase.auth.signInWithOtp({
-            email: email,
-            options: {
-              // set this to false if you do not want the user to be automatically signed up
-              shouldCreateUser: true,
-              emailRedirectTo: "https://example.com/welcome",
-            },
-          });
-          if (error) {
-            Alert.alert("Error", error.message);
-          } else {
-            Alert.alert("Success", "Check your email for the magic link!");
-          }
-        }
-      },
-      "plain-text"
-    );
-  } else {
-    // For Android, you could use a custom modal input
-    Alert.alert(
-      "Unavailable",
-      "Magic link prompt is not available on Android. Please implement a custom modal for email input."
-    );
-  }
 }

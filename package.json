@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "node validate-environment.js && expo start",
+    "start": "node validate-environment.js && expo start --no-https",
     "android": "node validate-environment.js && expo run:android",
     "ios": "node validate-environment.js && expo run:ios",
     "test": "jest --watchAll"
@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^2.5.1",
     "@shopify/flash-list": "1.7.1",
     "@supabase/supabase-js": "^2.49.1",
+    "axios": "^1.8.3",
     "expo": "~52.0.28",
     "expo-auth-session": "^6.0.2",
     "expo-blur": "~14.0.3",
