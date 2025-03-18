@@ -6,16 +6,13 @@ import { ThemedView } from "@/components/ThemedView";
 import { FlashList } from "@shopify/flash-list";
 import { useState, useEffect } from "react";
 import supabase from "@/lib/supabase";
+import { useAppDispatch } from "@/hooks/useApp";
+import { prepend } from "@/store/notification/notification-slice";
 
 interface FlashItem {
   id: number;
   title: string;
 }
-
-const mockData: FlashItem[] = Array.from({ length: 20 }, (_, i) => ({
-  id: i,
-  title: `Item ${i + 1}`,
-}));
 
 async function getListing() {
   const { data, error } = await supabase
@@ -31,6 +28,8 @@ async function getListing() {
 }
 
 export default function BuyScreen() {
+  const dispatch = useAppDispatch();
+
   const [listings, setListings] = useState<FlashItem[]>([]);
 
   useEffect(() => {
@@ -41,32 +40,40 @@ export default function BuyScreen() {
     });
   }, []);
 
-  const renderItem = ({ item }: { item: FlashItem }) => (
-    <Pressable
-      onPress={() => {
-        Alert.alert(`You selected ${item.title}`);
-      }}
-      style={tw`flex-col p-2`}
-    >
-      <ScrollView horizontal style={tw`flex-row mb-1`}>
-        <ImagePlaceholder />
-        <ImagePlaceholder />
-        <ImagePlaceholder />
-      </ScrollView>
-      <ThemedText type="defaultSemiBold">{item.title}</ThemedText>
-    </Pressable>
-  );
+  const renderItem = ({ item }: { item: FlashItem }) => {
+    function addNotification() {
+      Alert.alert(`You are now negotiating ${item.title}`);
+      dispatch(
+        prepend({
+          id: Math.floor(Math.random() * 1000).toString(),
+          title: `Negotiating ${item.title}`,
+          message: "You are now negotiating this item",
+          timestamp: 1,
+        })
+      );
+    }
+
+    return (
+      <Pressable onPress={addNotification} style={tw`flex-col p-2`}>
+        <ScrollView horizontal style={tw`flex-row mb-1`}>
+          <ImagePlaceholder />
+          <ImagePlaceholder />
+          <ImagePlaceholder />
+        </ScrollView>
+        <ThemedText type="defaultSemiBold">{item.title}</ThemedText>
+      </Pressable>
+    );
+  };
 
   return (
     <ThemedView style={tw`flex-1`}>
-      <SafeAreaView style={tw`flex-1`}>
-        <FlashList
-          data={listings}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
-          estimatedItemSize={220}
-        />
-      </SafeAreaView>
+      <SafeAreaView />
+      <FlashList
+        data={listings}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        estimatedItemSize={220}
+      />
     </ThemedView>
   );
 }

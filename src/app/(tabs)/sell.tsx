@@ -6,9 +6,8 @@ import tw from "twrnc";
 export default function SellScreen() {
   return (
     <ThemedView style={tw`flex-1 p-4`}>
-      <SafeAreaView style={tw`flex-1`}>
-        <ThemedText type="title">Sell</ThemedText>
-      </SafeAreaView>
+      <SafeAreaView />
+      <ThemedText type="title">Sell</ThemedText>
     </ThemedView>
   );
 }
