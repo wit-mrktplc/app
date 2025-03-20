@@ -2,19 +2,16 @@ import { Tabs, router } from "expo-router";
 import React, { useEffect } from "react";
 import { useAppSelector } from "@/hooks/useApp";
 
+import { View } from "react-native";
+
 import tw from "twrnc";
-import {
-  ShoppingCartIcon,
-  AlignJustifyIcon,
-  SearchIcon,
-} from "lucide-react-native";
 import { HapticTab } from "@/components/HapticTab";
-import { BlurView } from "expo-blur";
+import { icons } from "@/components/TabBarIcons";
+import { CaretLeft } from "phosphor-react-native";
 
 export default function TabLayout() {
   const auth = useAppSelector((state) => state.auth);
-
-  const notificationCount = useAppSelector((state) => state.notification.count);
+  const notification = useAppSelector((state) => state.notification);
 
   useEffect(() => {
     if (!auth.authed) {
@@ -24,65 +21,108 @@ export default function TabLayout() {
   }, [auth.authed]);
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: () => (
-          <BlurView
-            style={tw`absolute top-0 left-0 right-0 bottom-0`}
-            intensity={100}
-            tint="dark"
-          />
-        ),
-        tabBarShowLabel: false,
-        tabBarStyle: {
-          ...tw`absolute pt-2 h-14 bg-transparent mb-8 mx-26 rounded-full overflow-hidden`,
-        },
-      }}
-    >
-      <Tabs.Screen
-        name="buy"
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <ShoppingCartIcon
-              style={tw`${focused ? "text-white" : "text-[#8F8F8F]"} `}
-              size={24}
-              fill={focused ? "white" : "transparent"}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="search"
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <SearchIcon
-              style={tw`${focused ? "text-white" : "text-[#8F8F8F]"}`}
-              size={24}
-              strokeWidth={focused ? 2.5 : 1.5}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="sell"
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <AlignJustifyIcon
-              style={tw`${focused ? "text-white" : "text-[#8F8F8F]"}`}
-              size={24}
-              strokeWidth={focused ? 2.5 : 1.5}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="inbox"
-        options={{
-          href: null,
-        }}
-      />
-    </Tabs>
+    <>
+      <View style={{ flex: 1, position: "relative" }}>
+        <Tabs
+          tabBar={({ state, descriptors, navigation, insets }) => {
+            const currentRoute = state.routes[state.index];
+
+            const routes = {
+              buy: state.routes.find((route) => route.name === "buy")!,
+              search: state.routes.find((route) => route.name === "search")!,
+              sell: state.routes.find((route) => route.name === "sell")!,
+            };
+
+            return (
+              <>
+                {/* Conditionally render the return button */}
+                {currentRoute.state &&
+                currentRoute.state.index &&
+                currentRoute.state.index > 0 ? (
+                  <View
+                    style={tw`bg-[#1e1e1e] absolute rounded-full bottom-10 left-15 size-11 justify-center items-center`}
+                  >
+                    <HapticTab
+                      onPress={() => {
+                        router.back();
+                      }}
+                      style={tw`rounded-full p-2.5`}
+                    >
+                      {icons.back(false)}
+                    </HapticTab>
+                  </View>
+                ) : null}
+
+                {/* Conditionally render the inbox button */}
+                {notification.count > 0 ? (
+                  <View
+                    style={tw`bg-[#1e1e1e] absolute rounded-full bottom-10 right-15 size-11 justify-center items-center`}
+                  >
+                    <HapticTab
+                      onPress={() => {
+                        navigation.navigate("inbox");
+                      }}
+                      style={tw`rounded-full p-2.5`}
+                    >
+                      {icons.inbox(currentRoute.name === "inbox")}
+                    </HapticTab>
+                  </View>
+                ) : null}
+
+                {/* Render the tab bar with selected routes */}
+                <View
+                  style={tw`flex-row absolute bottom-10 justify-center items-center w-full`}
+                >
+                  <View
+                    style={{
+                      ...tw`px-2 py-0.5 flex-row justify-between items-center bg-[#1e1e1e] rounded-full`,
+                      borderCurve: "continuous",
+                    }}
+                  >
+                    {Object.values(routes).map((route) => {
+                      let isFocused = currentRoute.name === route.name;
+
+                      const onPress = () => {
+                        if (currentRoute.name === route.name) {
+                          if (
+                            currentRoute.state &&
+                            currentRoute.state.index &&
+                            currentRoute.state.index > 0
+                          ) {
+                            router.dismissAll();
+                            return;
+                          }
+                        }
+                        navigation.navigate(route.name);
+                      };
+
+                      return (
+                        <HapticTab
+                          key={route.key}
+                          accessibilityRole="button"
+                          accessibilityState={
+                            currentRoute.name === route.name
+                              ? { selected: true }
+                              : {}
+                          }
+                          onPress={onPress}
+                          style={tw`px-3 py-2 rounded-full`}
+                        >
+                          {/* @ts-ignore */}
+                          {icons[route.name](isFocused)}
+                        </HapticTab>
+                      );
+                    })}
+                  </View>
+                </View>
+              </>
+            );
+          }}
+          screenOptions={{
+            headerShown: false,
+          }}
+        />
+      </View>
+    </>
   );
 }
