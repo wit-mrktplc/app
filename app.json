@@ -4,11 +4,16 @@
     "slug": "expo-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/icon.png",
+    "icon": "./src/assets/images/ios-dark.png",
     "scheme": "com.adomaitisc.expoapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "icon": {
+        "dark": "./src/assets/images/ios-dark.png",
+        "light": "./src/assets/images/ios-light.png",
+        "tinted": "./src/assets/images/ios-tinted.png"
+      },
       "supportsTablet": true,
       "bundleIdentifier": "com.adomaitisc.expoapp",
       "infoPlist": {
@@ -21,7 +26,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#F6F6F6"
       },
       "package": "com.adomaitisc.expoapp"
     },
@@ -35,10 +40,13 @@
       [
         "expo-splash-screen",
         {
-          "image": "./src/assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#F6F6F6",
+          "image": "./src/assets/images/splash-icon-dark.png",
+          "dark": {
+            "image": "./src/assets/images/splash-icon-light.png",
+            "backgroundColor": "#000000"
+          },
+          "imageWidth": 200
         }
       ]
     ],

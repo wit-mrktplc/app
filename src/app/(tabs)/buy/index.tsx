@@ -1,4 +1,4 @@
-import { Alert, Pressable, SafeAreaView, ScrollView } from "react-native";
+import { SafeAreaView, ScrollView } from "react-native";
 import tw from "twrnc";
 
 import { ThemedView } from "@/components/ThemedView";

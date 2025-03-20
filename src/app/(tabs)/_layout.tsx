@@ -7,7 +7,6 @@ import { View } from "react-native";
 import tw from "twrnc";
 import { HapticTab } from "@/components/HapticTab";
 import { icons } from "@/components/TabBarIcons";
-import { CaretLeft } from "phosphor-react-native";
 
 export default function TabLayout() {
   const auth = useAppSelector((state) => state.auth);
