@@ -10,9 +10,9 @@
     "newArchEnabled": true,
     "ios": {
       "icon": {
-        "dark": "./assets/images/ios-dark.png",
-        "light": "./assets/images/ios-light.png",
-        "tinted": "./assets/images/ios-tinted.png"
+        "dark": "./src/assets/images/ios-dark.png",
+        "light": "./src/assets/images/ios-light.png",
+        "tinted": "./src/assets/images/ios-tinted.png"
       },
       "supportsTablet": true,
       "bundleIdentifier": "com.adomaitisc.expoapp",
